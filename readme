@@ -1,0 +1,5 @@
+steps to compile and view in browser:
+
+- download and setup [Emscripten](https://emscripten.org/docs/getting_started/downloads.html)
+- compile with: `emcc -o ./build/index.html main.c -O3 --shell-file template.html  -s NO_EXIT_RUNTIME=1 -s "EXPORTED_RUNTIME_METHODS=['ccall']"`
+- serve locally, i.e. `npx http-server ./build -o -p 3000`

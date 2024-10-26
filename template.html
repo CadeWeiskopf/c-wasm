@@ -1,0 +1,36 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <title>C(ade)WASM</title>
+  </head>
+  <body>
+    <h1>C(ade)WASM</h1>
+    <button
+      id="test"
+      type="button"
+    >
+      button
+    </button>
+
+    <script>
+      document.getElementById("test").addEventListener("click", () => {
+        const result = Module.ccall(
+          "test", // name of C function
+          null, // return type
+          null, // argument types
+          null // arguments
+        );
+      });
+    </script>
+
+    {{{ SCRIPT }}}
+  </body>
+</html>
