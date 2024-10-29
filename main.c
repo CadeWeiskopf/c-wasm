@@ -10,9 +10,9 @@ const char *vertexShaderSource = "#version 100\n"
   "}\0";
 
 const char *fragmentShaderSource = "#version 100\n"
-  "out vec4 FragColor;\n"
+  "precision mediump float;\n"
   "void main() {\n"
-  " FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+  " gl_FragColor = vec4(1.0, 0.5, 0.2, 1.0);\n"
   "}\0";
 
 void render() {
@@ -72,6 +72,12 @@ int main() {
   fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
   glCompileShader(fragmentShader);
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+      char infoLog[512];
+      glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+      printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED: %s\n", infoLog);
+  }
 
   unsigned int shaderProgram;
   shaderProgram = glCreateProgram();
@@ -81,13 +87,17 @@ int main() {
   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
   if(!success) {
     glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    printf("ERROR::SHADER::PROGRAM::LINK_FAILED\n%s\n", infoLog);
+    printf("ERROR::SHADER::PROGRAM::LINK_FAILED: %s\n", infoLog);
   }
 
   glUseProgram(shaderProgram);
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
+
+  glDrawArrays(GL_TRIANGLES, 0, 3);
 
   emscripten_set_main_loop(render, 0, 1);
   
